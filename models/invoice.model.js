@@ -28,4 +28,4 @@ InvoiceSchema.methods.toJSON = function () {
   return data;
 };
 
-module.exports = model("Invoice", InvoiceSchema); //Exportar
+module.exports = model("Invoice", InvoiceSchema);

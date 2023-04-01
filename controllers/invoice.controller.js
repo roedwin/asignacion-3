@@ -1,7 +1,7 @@
 const { response, request } = require("express");
 const { Invoice } = require("../models");
 
-const getInvoice = async (req, res = response) => { ///Busqueda
+const getInvoice = async (req, res = response) => { 
   const { limit = 5, from = 0 } = req.query;
   const query = { status: true };
   const [invoice] = await Promise.all([
@@ -21,7 +21,7 @@ const getInvoice = async (req, res = response) => { ///Busqueda
 
 //part 2
 
-const getInvoiceById = async (req = request, res = response) => { //Busqueda por medio del id
+const getInvoiceById = async (req = request, res = response) => {
   const { id } = req.params;
   const invoice = await Invoice.findById(id)
     .populate("user", "name")
@@ -32,15 +32,11 @@ const getInvoiceById = async (req = request, res = response) => { //Busqueda por
 
 //part 3
 
-const createInvoice = async (req, res = response) => { // POST Eenviar datos
+const createInvoice = async (req, res = response) => {
   const { status, user, ...body } = req.body;
 
   const invoiceDB = await Invoice.findOne({ name: body.name });
 
-/*  if (invoiceDB)
-    return res
-      .status(400)
-      .json({ msg: `the invoice ${invoiceDB.name} already exists` });*/
 
   const data = {
     ...body,
@@ -53,13 +49,10 @@ const createInvoice = async (req, res = response) => { // POST Eenviar datos
   res.status(200).json(invoice);
 };
 
- //part 4
-
-const updateInvoice = async (req, res) => { //Actualizar datos PUT
+const updateInvoice = async (req, res) => {
   const { id } = req.params;
   const { status, user, ...data } = req.body;
 
-//  data.name = data.name.toUpperCase();
   data.user = req.user._id;
 
   const invoice = await Invoice.findByIdAndUpdate(id, data, { new: true });
@@ -67,9 +60,8 @@ const updateInvoice = async (req, res) => { //Actualizar datos PUT
   res.json(invoice);
 };
 
-//part 5
 
-const deleteInvoice= async (req, res) => { //Eliminar
+const deleteInvoice= async (req, res) => {
   const { id } = req.params;
   const deletedInvoice = await Invoice.findByIdAndUpdate(
     id,
@@ -79,7 +71,7 @@ const deleteInvoice= async (req, res) => { //Eliminar
   res.json(deletedInvoice);
 };
 
-module.exports = { //Export
+module.exports = { 
   getInvoice,
   getInvoiceById,
   createInvoice,

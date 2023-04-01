@@ -27,7 +27,7 @@ const productExistById = async (id) => {
   const productExist = await Product.findById(id);
   if (!productExist) throw new Error(`the product Id does not exist`);
 };
-//ESTO HICE nosotros
+
 const invoiceExistById = async (id) => {
   const invoiceExist = await Invoice.findById(id);
   if (!invoiceExist) throw new Error(`the Invoice Id does not exist`);

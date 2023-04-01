@@ -9,17 +9,15 @@ const {
 } = require("../controllers/invoice.controller");
 const {
   invoiceExistById,
-  userByIdExist, //Me fue al helper validator a agregar esta validacion
-  //categoryExistById,
-} = require("../helpers/db-validators"); //aqui TODO 
-const { validateJWT, validateFields, isAdminRole } = require("../middleware");//aqui
+  userByIdExist, 
+} = require("../helpers/db-validators"); 
+const { validateJWT, validateFields, isAdminRole } = require("../middleware");
 
 const router = Router();
 
 router.get("/", getInvoice);
 
-//part 1
-router.get( //Nuestro metodo por medio de GET
+router.get( 
   "/:id",
   [
     check("id", "is not a mongoID").isMongoId(),
@@ -30,23 +28,20 @@ router.get( //Nuestro metodo por medio de GET
 );
 
 
-//part 2
-router.post( //Enviamos datos por post
+router.post(
   "/",
   [
     check("user", "user is mandatory").not().isEmpty(),
     check("user", "is not a mongoID").isMongoId(),
     check("user").custom(userByIdExist),
-    //check("name", "name is mandatory").not().isEmpty(), //aqui no se que hice
     validateJWT,
     validateFields,
   ],
   createInvoice
 );
 
-//part 3
 
-router.put( //Es para poder actualizar
+router.put( 
   [
     validateJWT,
     check("name", "name is mandatory").not().isEmpty(),
@@ -57,7 +52,6 @@ router.put( //Es para poder actualizar
   updateInvoice
 );
 
-//part 4
 
 router.delete(
   "/:id",
@@ -71,4 +65,4 @@ router.delete(
   deleteInvoice
 );
 
-module.exports = router; //exporta
+module.exports = router; 

@@ -55,22 +55,18 @@ const createDetailInvoice = async (req, res = response) => {
   const precioTotal = productDB.precio * productUnit ;
 
   const detailInvoices = await DetailInvoice.find({ invoice });
-  const distinctProducts = new Set(); // set para almacenar productos distintos
-  let totalInvoice = 0; // variable para almacenar el total de la factura
-
+  const distinctProducts = new Set(); 
+  let totalInvoice = 0; 
 
   detailInvoices.forEach(detailInvoice => {
     distinctProducts.add(detailInvoice.product.toString());
-    totalInvoice += detailInvoice.precioTotal; // sumar el precio total del producto a la factura
+    totalInvoice += detailInvoice.precioTotal;
   });
-  // verificar si el producto ya ha sido agregado previamente
   if (distinctProducts.has(product)) {
     return res.status(400).json({ msg: `The product ${product} has already been added to the invoice.` });
   }
-  // agregar el producto al set de productos distintos
   distinctProducts.add(product);
 
-  // verificar que no se hayan agregado más de 10 productos distintos
   if (distinctProducts.size > 10) {
     return res.status(400).json({ msg: `Cannot add more than 10 distinct products to the invoice.` });
   }
@@ -78,11 +74,6 @@ const createDetailInvoice = async (req, res = response) => {
   const data = {
     ...body,
    // name: body.name.toUpperCase(),
-  /* product: product,
-    invoice: invoice,
-    user: req.user._id,
-    productUnit: productUnit,
-    precioTotal: precioTotal,*/
     product, 
     invoice,
     user: req.user._id,
@@ -93,7 +84,6 @@ const createDetailInvoice = async (req, res = response) => {
   const detailInvoice = new DetailInvoice(data);
   await detailInvoice.save();
 
-   // actualizar el total de la factura en la colección de Invoice
   const invoiceToUpdate = await Invoice.findById(invoice);
   invoiceToUpdate.total = totalInvoice + precioTotal;
   await invoiceToUpdate.save();
@@ -112,13 +102,12 @@ const updateDetailInvoice = async (req, res) => {
   }
 
   const precioTotal = productDB.precio * productUnit ;
-  // Actualizamos los datos del detalle de factura
   detailInvoice.status = status ?? detailInvoice.status;
   detailInvoice.user = user ?? detailInvoice.user;
   detailInvoice.product = product ?? detailInvoice.product;
   detailInvoice.invoice = invoice ?? detailInvoice.invoice;
   detailInvoice.productUnit = productUnit ?? detailInvoice.productUnit;
-  detailInvoice.precioTotal = precioTotal;                           //data.precioTotal ?? detailInvoice.precioTotal;
+  detailInvoice.precioTotal = precioTotal;
 
   await detailInvoice.save();
 

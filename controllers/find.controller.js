@@ -88,10 +88,10 @@ const find = (req, res = response) => {
     case "category":
       findCategories(term, res);
       break;
-    case "invoice": //ara
+    case "invoice":
       findInvoices(term, res);
       break;
-    case "detailInvoice": //ara
+    case "detailInvoice":
       findDetailInvoices(term, res);
       break;
     case "role":
